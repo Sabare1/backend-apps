@@ -1,14 +1,8 @@
-const express = require('express');
-const path = require('path')
-const server = express()
-server.use(express.static("./public"))
+const express = require("express");
+const server = express();
 
-server.get('/', (req, res)=>{
-    res.status(200).sendFile(path.resolve(__dirname, "./navbar-app/index.html"))
-})
-
-server.all('*', (req, res)=>{
-    res.send(`<h1>Page not found</h1><a href='/'>home page</a>`)
+server.get('/',(req, res)=>{
+    res.json([{name:"john"}, {name:"smilga"}])
 })
 
 server.listen(5000, ()=>{
