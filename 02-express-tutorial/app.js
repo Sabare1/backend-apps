@@ -1,20 +1,16 @@
 const express = require('express')
 const server = express()
+const logger = require('./logger')
+const authorize = require('./authorize.js')
+const morgan = require('morgan')
+server.use(morgan('tiny'))
 
-const logger = (req, res, next) =>{
-    const method = req.method;
-    const url = req.url;
-    const year = new Date().getFullYear();
-    console.log(method, url, year);
-    next();
-}
-
-server.get('/', logger, (req, res) =>{
-    res.send("Home");
+server.get('/', (req, res) =>{
+    res.status(200).send("Home");
 })
 
-server.get('/about', logger, (req, res)=>{
-    res.send("About")
+server.get('/about', (req, res)=>{
+    res.status(200).send("About")
 })
 
 server.listen(5000, () => {
