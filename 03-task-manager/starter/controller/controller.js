@@ -34,10 +34,10 @@ const getTask = async (req, res) => {
     }
 };
 
-const updateTask = (req, res) => {
+const updateTask = async (req, res) => {
     try{
-        const { id } = req.body;
-        const task = Task.findOneAndUpdate({_id:id}, req.body)
+        const id = req.params.id;
+        const task = await Task.findOneAndUpdate({_id:id}, req.body, {new:true, runValidators:true});
         if(!task){
             return res.status(404).json({msg: "Cannot find the task you're looking for!"});
         }
