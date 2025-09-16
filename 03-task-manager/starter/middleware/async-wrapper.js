@@ -3,8 +3,8 @@ const asyncWrapper = (fn) => {
         try{
             await fn(req, res, next); 
         }
-        catch(error){
-            next(error);
+        catch(err){
+            next(err);
         }
     }
 }

@@ -1,5 +1,5 @@
 const Task = require('../models/Task.js')
-const createError = require('../errors/custom-error.js')
+const {createError, } = require('../errors/custom-error.js')
 const asyncWrapper = require('../middleware/async-wrapper.js')
 
 const getAll = asyncWrapper(async (req, res, next) => {
@@ -16,8 +16,7 @@ const getTask = asyncWrapper(async (req, res, next) => {
     const id = req.params.id;
     const task = await Task.findOne({_id: id})
     if(!task){
-        const err = createError("Not Found", 404);
-        return next(err);
+        return next(createError(`cannot find the task with the id: ${id}`, 404));
     }
     res.status(200).json({ task });
 });
@@ -26,8 +25,7 @@ const updateTask = asyncWrapper(async (req, res, next) => {
     const id = req.params.id;
     const task = await Task.findOneAndUpdate({_id:id}, req.body, {new:true, runValidators:true});
     if(!task){
-        const err = createError("Not Found", 404);
-        return next(err);
+        return next(createError("Not Found", 404));
     }
     res.status(200).json({ task });
 });
@@ -36,8 +34,7 @@ const deleteTask = asyncWrapper(async (req, res, next) => {
     const id = req.params.id;
     const task = await Task.findOneAndDelete({_id:id});
     if(!task){
-        const err = createError("Not Found", 404);
-        return next(err);
+        return next(createError("Not Found", 404));
     }
     res.status(200).json(task);
 })
