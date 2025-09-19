@@ -1,19 +1,37 @@
 const prodTable = require('../models/product')
 
 const getAllProductsStatic = async(req, res) => {
-    const products = await prodTable.find({featured: true, name: "vase table"});
+    const products = await prodTable.find({}).select("name price company rating");
     res.status(200).json({msg: products, nbHits: products.length});
 }
 
 const getAllProducts = async(req, res) => {
-    const { featured } = req.query;
+    const { featured, company, name, sort, fields } = req.query;
     const queryObj = {};
     if(featured){
         queryObj.featured = featured === 'true' ? true : false;
     }
-    //throw new Error("Something went wrong");
-    const products = await prodTable.find(queryObj);
-    res.status(200).json({msg: products});
+    if(company){
+        queryObj.company = company;
+    }
+    if(name){
+        queryObj.name = {$regex:name, $options:'i'};
+    }
+    let products = prodTable.find(queryObj);
+    if(sort){
+        const sortList = sort.split(',').join(' ');
+        products = products.sort(sortList);
+    }
+    else{
+        products = products.sort("createdAt");
+    }
+
+    if(fields){
+        const feildsList = fields.split(',').join(' ');
+        products = products.select(feildsList);
+    }
+    const result = await products;
+    res.status(200).json({msg: result, nbHits: result.length});
 }
 
 const getProduct = async(req, res) => {
@@ -22,7 +40,6 @@ const getProduct = async(req, res) => {
     if(!product){
         console.log(`cannot find the product with id: ${id}`);
     }
-    // res.status(200).json({msg:"dummy product"});
     res.status(200).json({msg: product});
 }
 
