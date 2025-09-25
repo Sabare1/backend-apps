@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const storeSchema = new mongoose.Schema({
     name:{
         type: String,
-        required: [true, "Product name is required"]
+        required: [true, "Product name is required"],
     },
     price:{
         type: Number,
-        required: [true, "Product price is required"]
+        required: [true, "Product price is required"],
     },
     featured:{
         type: Boolean,
