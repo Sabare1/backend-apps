@@ -9,6 +9,7 @@ const url = process.env.MONGO_URI;
 
 const errorHandleMiddleware = require('./middleware/error-handler.js');
 const notFoundMiddleware = require('./middleware/not-found.js');
+const authMiddleware = require('./middleware/authentication.js')
 
 const authRoute = require('./routes/auth.js');
 const jobsRoute = require('./routes/jobs.js');
@@ -24,6 +25,7 @@ app.use('/api/v1/jobs', jobsRoute);
 
 app.use(errorHandleMiddleware);
 app.use(notFoundMiddleware);
+app.use(authMiddleware);
 
 const start = () => {
     try {
