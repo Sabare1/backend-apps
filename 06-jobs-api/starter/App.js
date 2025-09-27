@@ -16,16 +16,11 @@ const jobsRoute = require('./routes/jobs.js');
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.status(200).json({msg:"jobs api"});
-})
-
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/jobs', jobsRoute);
+app.use('/api/v1/jobs', authMiddleware, jobsRoute);
 
 app.use(errorHandleMiddleware);
 app.use(notFoundMiddleware);
-app.use(authMiddleware);
 
 const start = () => {
     try {
